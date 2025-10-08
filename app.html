@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>☕ Smart Tea Shop - Full Premium Website</title>
+<style>
+/* 🌿 Base & Dark Mode */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#f6f5f3;color:#333;transition:0.4s;}
+body.dark{background:#1e1e1e;color:#f0f0f0;}
+header{background:#2f2f2f;color:#fff;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;transition:0.3s;}
+header h1{font-size:1.5rem;}
+nav a{color:#fff;text-decoration:none;margin:0 1rem;font-weight:500;cursor:pointer;}
+nav a:hover{text-decoration:underline;}
+#theme-toggle{cursor:pointer;padding:0.3rem 0.6rem;border-radius:6px;background:#4caf50;color:#fff;border:none;transition:0.3s;}
+#theme-toggle:hover{background:#3e8e41;}
+
+/* Main & Sections */
+main{scroll-behavior:smooth;}
+section{padding:4rem 2rem;opacity:0;transform:translateY(30px);transition:0.8s ease;}
+section.visible{opacity:1;transform:translateY(0);}
+h2{text-align:center;margin-bottom:1rem;color:#2f2f2f;}
+
+/* Hero */
+#home{background:linear-gradient(135deg,#ffe2e2,#fff5e6);text-align:center;}
+#home h2{font-size:2.5rem;margin-bottom:1rem;}
+#home p{font-size:1.2rem;margin-bottom:2rem;}
+#home button{padding:0.8rem 1.5rem;border:none;background:#2f8f2f;color:#fff;border-radius:50px;font-size:1rem;cursor:pointer;transition:0.3s;}
+#home button:hover{background:#257625;}
+
+/* 🍵 Tea Cards */
+.tea-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;}
+.tea-card{background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);overflow:hidden;transition:0.4s;cursor:pointer;}
+.tea-card:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 10px 25px rgba(0,0,0,0.25);}
+.tea-card img{width:100%;height:150px;object-fit:cover;transition:0.4s;}
+.tea-card .info{padding:1rem;text-align:center;}
+.tea-card h3{font-size:1.2rem;margin-bottom:0.5rem;}
+.tea-card p{font-size:0.9rem;color:#555;}
+.tea-card button{margin:0.3rem 0.2rem;background:#2f8f2f;color:#fff;border:none;padding:0.5rem 0.9rem;border-radius:6px;cursor:pointer;transition:0.3s;}
+.tea-card button:hover{background:#257625;transform:scale(1.05);}
+
+/* 🛒 Floating Cart */
+#cart-float{position:fixed;bottom:20px;right:20px;background:#2f8f2f;color:#fff;padding:1rem 1.2rem;border-radius:50px;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.2);display:flex;align-items:center;gap:0.5rem;z-index:1000;transition:0.3s;}
+#cart-float:hover{transform:scale(1.05);}
+#cart-count{background:#fff;color:#2f8f2f;padding:0 0.5rem;border-radius:50%;font-weight:600;}
+
+/* 🛒 Cart Section */
+#cart{background:#fff;border-radius:12px;padding:1rem;box-shadow:0 4px 15px rgba(0,0,0,0.1);margin-top:1rem;}
+#cart ul{list-style:none;}
+#cart li{display:flex;justify-content:space-between;margin:0.5rem 0;}
+#total{margin-top:1rem;font-weight:600;}
+
+/* 🤖 Chatbot */
+#chatbot{background:#fff;border-radius:12px;padding:1rem;box-shadow:0 4px 15px rgba(0,0,0,0.1);max-width:500px;margin:auto;display:flex;flex-direction:column;}
+#chat-window{height:250px;overflow-y:auto;border:1px solid #ccc;padding:0.5rem;margin-bottom:1rem;display:flex;flex-direction:column;}
+.bot,.user{margin:0.3rem 0;padding:0.5rem 0.7rem;border-radius:10px;max-width:80%;}
+.bot{background:#e6ffe6;align-self:flex-start;}
+.user{background:#d1e7ff;align-self:flex-end;text-align:right;}
+#user-input{width:100%;padding:0.5rem;border:1px solid #ccc;border-radius:8px;}
+#mic-btn{background:#2f8f2f;color:#fff;border:none;padding:0.5rem 1rem;border-radius:50px;margin-top:0.5rem;cursor:pointer;transition:0.3s;}
+#mic-btn:hover{background:#257625;}
+
+/* About & Testimonials */
+#about, #testimonials, #contact{background:#fff;border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);margin:2rem 0;padding:2rem;}
+.testimonial{margin:1rem 0;padding:1rem;background:#f0f0f0;border-radius:10px;}
+.testimonial h4{font-weight:600;margin-bottom:0.3rem;}
+
+/* Contact Form */
+#contact form{display:flex;flex-direction:column;gap:1rem;}
+#contact input, #contact textarea{padding:0.7rem;border:1px solid #ccc;border-radius:6px;}
+#contact button{padding:0.8rem;border:none;background:#2f8f2f;color:#fff;border-radius:50px;font-size:1rem;cursor:pointer;transition:0.3s;}
+#contact button:hover{background:#257625;}
+
+/* Toast */
+#toast{position:fixed;bottom:80px;right:20px;background:#4caf50;color:#fff;padding:0.7rem 1rem;border-radius:8px;opacity:0;transition:0.5s;pointer-events:none;}
+
+/* Footer */
+footer{text-align:center;padding:1.5rem;background:#2f2f2f;color:#fff;margin-top:2rem;border-top:2px solid #4caf50;}
+
+/* Responsive */
+@media(max-width:768px){.tea-container{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));}#home h2{font-size:2rem;}}
+</style>
+</head>
+<body>
+<header>
+<h1>☕ Smart Tea Shop</h1>
+<nav>
+  <a onclick="scrollToSection('home')">Home</a>
+  <a onclick="scrollToSection('shop')">Shop</a>
+  <a onclick="scrollToSection('chatbot-section')">TeaBot</a>
+  <a onclick="scrollToSection('about')">About</a>
+  <a onclick="scrollToSection('testimonials')">Testimonials</a>
+  <a onclick="scrollToSection('contact')">Contact</a>
+  <button id="theme-toggle">Toggle Dark</button>
+</nav>
+</header>
+
+<main>
+<!-- Home Section -->
+<section id="home">
+<h2>Welcome to Smart Tea Shop 🍃</h2>
+<p>Discover your favorite teas with smart recommendations and interactive TeaBot!</p>
+<button onclick="scrollToSection('shop')">Shop Now 🛒</button>
+</section>
+
+<!-- Shop Section -->
+<section id="shop">
+<h2>Our Teas</h2>
+<div class="tea-container" id="tea-list"></div>
+<div id="cart">
+<h3>Your Cart</h3>
+<ul id="cart-items"></ul>
+<p id="total">Total: Rs 0</p>
+<button onclick="generateReceipt()">🧾 Generate Receipt</button>
+</div>
+<div id="recommended">
+<h3>Recommended for You</h3>
+<div class="tea-container" id="recommended-list"></div>
+</div>
+</section>
+
+<!-- TeaBot Section -->
+<section id="chatbot-section">
+<h2>Ask TeaBot 🤖</h2>
+<div id="chatbot">
+<div id="chat-window"></div>
+<input type="text" id="user-input" placeholder="Ask about teas..." onkeydown="if(event.key==='Enter')sendMessage()" />
+<button id="mic-btn">🎤 Talk to TeaBot</button>
+</div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+<h2>About Us</h2>
+<p>Smart Tea Shop started with the vision to bring premium teas with modern technology. Our team loves tea and innovation!</p>
+</section>
+
+<!-- Testimonials Section -->
+<section id="testimonials">
+<h2>Customer Testimonials</h2>
+<div class="testimonial">
+<h4>Ravi S.</h4>
+<p>"Amazing teas! The TeaBot recommendations are surprisingly accurate!"</p>
+</div>
+<div class="testimonial">
+<h4>Meera P.</h4>
+<p>"Love the modern UI and floating cart. Really feels like a professional app!"</p>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+<h2>Contact Us</h2>
+<form onsubmit="showToast('Form submitted (frontend-only)!');return false;">
+<input type="text" placeholder="Your Name" required/>
+<input type="email" placeholder="Your Email" required/>
+<textarea placeholder="Your Message" required></textarea>
+<button type="submit">Send Message</button>
+</form>
+<p style="margin-top:1rem;">Follow us: <b>Facebook | Instagram | Twitter</b></p>
+</section>
+</main>
+
+<div id="cart-float" onclick="scrollToSection('cart')">🛒 Cart <span id="cart-count">0</span></div>
+<div id="toast"></div>
+<footer>© 2025 Kabir’s Smart Tea Shop | All Rights Reserved</footer>
+
+<script>
+// 🍵 Tea Data
+const teas=[
+{id:1,name:"Masala Chai",price:120,flavor:"Spicy",description:"Strong blend of spices and milk tea.",image:"https://images.unsplash.com/photo-1600170311836-f8bf5fabe1c1"},
+{id:2,name:"Green Tea",price:100,flavor:"Light",description:"Refreshing and healthy with a mild taste.",image:"https://images.unsplash.com/photo-1589275038142-f82f0a9c0f4e"},
+{id:3,name:"Lemon Honey Tea",price:90,flavor:"Citrus",description:"A zesty mix of lemon and honey.",image:"https://images.unsplash.com/photo-1590080875837-37e3b6c1f42e"},
+{id:4,name:"Black Tea",price:80,flavor:"Strong",description:"Classic rich black tea for energy.",image:"https://images.unsplash.com/photo-1587453478340-9e31d9c0c6d4"}
+];
+
+// 🛒 Cart & Preference
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let userPref=localStorage.getItem("favoriteFlavor")||"";
+
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.innerText=msg;
+  t.style.opacity="1";
+  setTimeout(()=>t.style.opacity="0",2000);
+}
+
+// Render Teas
+function renderTeas(){
+  const list=document.getElementById("tea-list");
+  list.innerHTML=teas.map(t=>`
+  <div class="tea-card">
+    <img src="${t.image}" alt="${t.name}">
+    <div class="info">
+      <h3>${t.name}</h3>
+      <p>${t.description}</p>
+      <p><b>Rs ${t.price}</b></p>
+      <button onclick="addToCart(${t.id})">Add to Cart</button>
+      <button onclick="setPreference('${t.flavor}')">💚 Favorite</button>
+    </div>
+  </div>
+  `).join('');
+  renderRecommended();
+  updateCartCount();
+}
+
+// Cart Functions
+function addToCart(id){
+  const tea=teas.find(t=>t.id===id);
+  cart.push(tea);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  renderCart(); updateCartCount(); showToast(`${tea.name} added to cart!`);
+}
+function renderCart(){
+  const list=document.getElementById("cart-items");
+  let total=0;
+  list.innerHTML=cart.map((item,index)=>{total+=item.price; return `<li>${item.name} - Rs ${item.price} <button onclick="removeItem(${index})">❌</button></li>`}).join('');
+  document.getElementById("total").innerText="Total: Rs "+total;
+}
+function removeItem(index){ const item=cart[index]; cart.splice(index,1); localStorage.setItem("cart",JSON.stringify(cart)); renderCart(); updateCartCount(); showToast(`${item.name} removed from cart!`);}
+function generateReceipt(){ let text="🧾 Smart Tea Shop Receipt\n\n"; let total=0; cart.forEach(item=>{ text+=`${item.name} - Rs ${item.price}\n`; total+=item.price; }); text+=`\nTotal: Rs ${total}\nThank you for visiting!`; const blob=new Blob([text],{type:"text/plain"}); const link=document.createElement("a"); link.href=URL.createObjectURL(blob); link.download="receipt.txt"; link.click();}
+
+// TeaBot
+const chatWindow=document.getElementById("chat-window");
+function sendMessage(){
+  const input=document.getElementById("user-input");
+  const msg=input.value.trim(); if(!msg) return; appendMessage("user",msg); input.value="";
+  setTimeout(()=>botReply(msg),600);
+}
+function appendMessage(sender,text){ const div=document.createElement("div"); div.className=sender; div.innerText=text; chatWindow.appendChild(div); chatWindow.scrollTop=chatWindow.scrollHeight;}
+function botReply(msg){ msg=msg.toLowerCase(); let reply="I'm not sure, but every tea is special!"; if(userPref) reply=`Based on your favorite flavor (${userPref}), I recommend ${teas.find(t=>t.flavor.toLowerCase()===userPref.toLowerCase())?.name||'our teas'}!`; if(msg.includes("strong")) reply="Try our Black Tea for a bold flavor!"; else if(msg.includes("spicy")) reply="Masala Chai is perfect for you!"; else if(msg.includes("light")) reply="Green Tea might be your best choice!"; else if(msg.includes("lemon")) reply="You’ll love our Lemon Honey Tea 🍋🍯!"; appendMessage("bot","Typing..."); setTimeout(()=>{ const last=document.querySelector("#chat-window .bot:last-child"); last.innerText=reply; speechSynthesis.speak(new SpeechSynthesisUtterance(reply)); },1000);}
+
+// Preferences & Recommendations
+function setPreference(flavor){ userPref=flavor; localStorage.setItem("favoriteFlavor",flavor); showToast(`Your favorite flavor is set to ${flavor}!`); renderRecommended();}
+function renderRecommended(){ const rec=document.getElementById("recommended-list"); if(!userPref){rec.innerHTML="<p>Select a favorite flavor to see recommendations!</p>"; return;} const recTeas=teas.filter(t=>t.flavor.toLowerCase()===userPref.toLowerCase()); rec.innerHTML=recTeas.map(t=>`<div class="tea-card"><img src="${t.image}" alt="${t.name}"><div class="info"><h3>${t.name}</h3><p>${t.description}</p><p><b>Rs ${t.price}</b></p></div></div>`).join('');}
+
+// Floating Cart
+function updateCartCount(){ document.getElementById("cart-count").innerText=cart.length; }
+function scrollToSection(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); }
+
+// Dark Mode
+const themeBtn=document.getElementById("theme-toggle"); themeBtn.addEventListener("click",()=>{ document.body.classList.toggle("dark"); localStorage.setItem("theme",document.body.classList.contains("dark")?"dark":"light"); });
+if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
+
+// Scroll Animations
+const sections=document.querySelectorAll("section");
+const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");}});},{threshold:0.3});
+sections.forEach(s=>observer.observe(s));
+
+// Voice Mic
+const micBtn=document.getElementById("mic-btn");
+micBtn.addEventListener("click",()=>{ if(!('webkitSpeechRecognition' in window)){alert("Speech Recognition not supported"); return;} const rec=new webkitSpeechRecognition(); rec.lang="en-US"; rec.start(); rec.onresult=function(event){ const transcript=event.results[0][0].transcript; document.getElementById("user-input").value=transcript; sendMessage(); }; });
+
+// Initialize
+renderTeas(); renderCart();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
